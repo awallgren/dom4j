@@ -14,7 +14,6 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -31,7 +30,6 @@ import org.dom4j.Node;
 import org.dom4j.ProcessingInstruction;
 import org.dom4j.Text;
 import org.dom4j.tree.NamespaceStack;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -1482,28 +1480,27 @@ public class XMLWriter extends XMLFilterImpl implements LexicalHandler {
                     writeNamespace(null, uri);
                 }
             } else {
-                char quote = format.getAttributeQuoteCharacter();
-                writer.write(" ");
-                writer.write(attribute.getQualifiedName());
-                writer.write("=");
-                writer.write(quote);
-                writeEscapeAttributeEntities(attribute.getValue());
-                writer.write(quote);
+                writeAttribute(attribute.getQualifiedName(),
+                    attribute.getValue());
             }
         }
     }
 
-    protected void writeAttribute(Attribute attribute) throws IOException {
+    protected void writeAttribute(String name, String value) throws IOException {
         writer.write(" ");
-        writer.write(attribute.getQualifiedName());
+        writer.write(name);
         writer.write("=");
 
         char quote = format.getAttributeQuoteCharacter();
         writer.write(quote);
 
-        writeEscapeAttributeEntities(attribute.getValue());
+        writeEscapeAttributeEntities(value);
 
         writer.write(quote);
+    }
+
+    protected void writeAttribute(Attribute attribute) throws IOException {
+        writeAttribute(attribute.getQualifiedName(), attribute.getValue());
         lastOutputNodeType = Node.ATTRIBUTE_NODE;
     }
 
@@ -1515,13 +1512,7 @@ public class XMLWriter extends XMLFilterImpl implements LexicalHandler {
 
     protected void writeAttribute(Attributes attributes, int index)
             throws IOException {
-        char quote = format.getAttributeQuoteCharacter();
-        writer.write(" ");
-        writer.write(attributes.getQName(index));
-        writer.write("=");
-        writer.write(quote);
-        writeEscapeAttributeEntities(attributes.getValue(index));
-        writer.write(quote);
+        writeAttribute(attributes.getQName(index), attributes.getValue(index));
     }
 
     protected void indent() throws IOException {
