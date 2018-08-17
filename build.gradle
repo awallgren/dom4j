@@ -54,6 +54,13 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 publishing {
+    repositories {
+        maven {
+            name 'EcArtifactory'
+            url 'http://artifactory.electric-cloud.com/artifactory/thirdparty'
+        }
+    }
+
     publications {
         mavenJava(MavenPublication) {
             from components.java
