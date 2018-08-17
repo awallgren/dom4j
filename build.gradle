@@ -68,6 +68,7 @@ publishing {
 
             pom {
                 name = 'dom4j'
+                version = '2.1.1-PATCH1'
                 description = 'flexible XML framework for Java'
                 url = 'http://dom4j.github.io/'
                 licenses {
